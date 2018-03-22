@@ -18,7 +18,7 @@
                         </Grid>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Fill" Value="Black" TargetName="ellipse"/>
+                                <Setter Property="Fill" Value="LightPink" TargetName="ellipse"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -43,7 +43,7 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Border Width="32" Height="32" BorderBrush="LightGray" BorderThickness="1" Background="LightGray">
+                            <Border Width="32" Height="32" BorderBrush="Black" BorderThickness="1" Background="LightGray">
                                 <Button/>
 
                             </Border>
