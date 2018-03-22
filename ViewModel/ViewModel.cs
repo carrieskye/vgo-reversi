@@ -46,8 +46,6 @@ namespace ViewModel
 
     public class BoardSquareViewModel
     {
-        public Player Owner {get; set; } 
-
+        public Player Owner { get; set; }
     }
-
 }

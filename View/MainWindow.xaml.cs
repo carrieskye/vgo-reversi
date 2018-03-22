@@ -33,7 +33,6 @@ namespace View
             ReversiGame game = new ReversiGame(8, 8);
 
             board = new BoardViewModel(game.Board);
-
             this.DataContext = board;
         }
     }
