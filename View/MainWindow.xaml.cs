@@ -27,14 +27,10 @@ namespace View
         public MainWindow()
         {
             InitializeComponent();
-            const int WIDTH = 8;
-            const int HEIGHT = 8;
-            var grid = new Grid<int>(WIDTH, HEIGHT, p => p.X + p.Y * WIDTH);
-
-            this.DataContext = grid;
 
             board = new BoardViewModel();
-            Rows.DataContext = board;
+
+            this.DataContext = board;
         }
     }
 }

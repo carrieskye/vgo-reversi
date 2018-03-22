@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DataStructures;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,21 +9,25 @@ namespace ViewModel
 {
     public class BoardViewModel
     {
-        public List<BoardRowViewModel> Rows;
+        private readonly IList<BoardRowViewModel> rows;
+
+        public IList<BoardRowViewModel> Rows { get { return rows; } }
 
         public BoardViewModel()
         {
-            Rows = new List<BoardRowViewModel>(8);
+            rows = Enumerable.Range(1, 8).Select(_ => new BoardRowViewModel()).ToList().AsReadOnly();
         }
     }
 
     public class BoardRowViewModel
     {
-        public List<BoardSquareViewModel> Squares;
+        private readonly IList<BoardSquareViewModel> squares;
+
+        public IList<BoardSquareViewModel> Squares { get { return squares; } }
 
         public BoardRowViewModel()
         {
-            Squares = new List<BoardSquareViewModel>(8);
+            squares = Enumerable.Range(1, 8).Select(_ => new BoardSquareViewModel()).ToList().AsReadOnly();
         }
     }
 
