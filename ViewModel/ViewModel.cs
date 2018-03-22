@@ -1,4 +1,5 @@
 ﻿using DataStructures;
+using Model.Reversi;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,12 +11,14 @@ namespace ViewModel
     public class BoardViewModel
     {
         private readonly IList<BoardRowViewModel> rows;
+        private readonly ReversiBoard reversiBoard;
 
         public IList<BoardRowViewModel> Rows { get { return rows; } }
 
-        public BoardViewModel()
+        public BoardViewModel(ReversiBoard reversiBoard)
         {
-            rows = Enumerable.Range(1, 8).Select(_ => new BoardRowViewModel()).ToList().AsReadOnly();
+            this.reversiBoard = reversiBoard;
+            rows = Enumerable.Range(1, reversiBoard.Height).Select(_ => new BoardRowViewModel(reversiBoard.Width)).ToList().AsReadOnly();
         }
     }
 
@@ -25,9 +28,9 @@ namespace ViewModel
 
         public IList<BoardSquareViewModel> Squares { get { return squares; } }
 
-        public BoardRowViewModel()
+        public BoardRowViewModel(int width)
         {
-            squares = Enumerable.Range(1, 8).Select(_ => new BoardSquareViewModel()).ToList().AsReadOnly();
+            squares = Enumerable.Range(1, width).Select(_ => new BoardSquareViewModel()).ToList().AsReadOnly();
         }
     }
 

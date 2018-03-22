@@ -1,4 +1,5 @@
 ﻿using DataStructures;
+using Model.Reversi;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,7 +29,9 @@ namespace View
         {
             InitializeComponent();
 
-            board = new BoardViewModel();
+            ReversiGame game = new ReversiGame(8, 8);
+
+            board = new BoardViewModel(game.Board);
 
             this.DataContext = board;
         }
