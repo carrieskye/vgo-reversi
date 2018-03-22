@@ -19,6 +19,14 @@ namespace ViewModel
         {
             this.reversiBoard = reversiBoard;
             rows = Enumerable.Range(1, reversiBoard.Height).Select(_ => new BoardRowViewModel(reversiBoard.Width)).ToList().AsReadOnly();
+            for (int i = 0; i < reversiBoard.Height; i++)
+            {
+                for (int j = 0; j < reversiBoard.Width; j++)
+                {
+                    var position = new Vector2D(i, j);
+                    rows[i].Squares[j].Owner = reversiBoard[position];
+                }
+            }
         }
     }
 
@@ -36,6 +44,6 @@ namespace ViewModel
 
     public class BoardSquareViewModel
     {
-
+        public Player Owner {get; set;}
     }
 }
