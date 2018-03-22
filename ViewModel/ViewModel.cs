@@ -2,9 +2,11 @@
 using Model.Reversi;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Data;
 
 namespace ViewModel
 {
@@ -44,6 +46,8 @@ namespace ViewModel
 
     public class BoardSquareViewModel
     {
-        public Player Owner {get; set;}
+        public Player Owner {get; set; } 
+
     }
+
 }

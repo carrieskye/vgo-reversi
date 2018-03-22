@@ -6,6 +6,9 @@
         xmlns:local="clr-namespace:View"
         mc:Ignorable="d"
         Title="Reversi" Height="350" Width="525">
+    <Window.Resources>
+        <local:PlayerToColorConverter x:Key="playerToColorConverter" />
+    </Window.Resources>
     <ItemsControl ItemsSource="{Binding Rows}">
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
@@ -17,15 +20,13 @@
                 <ItemsControl ItemsSource="{Binding Squares}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <StackPanel Orientation="Horizontal" />
+                            <StackPanel Orientation="Horizontal"/>
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Border Width="32" Height="32" BorderBrush="Black" BorderThickness="1">
-                                
-                                <TextBlock Text="{Binding Owner}"></TextBlock>
-
+                            <Border Width="32" Height="32" BorderBrush="Black" BorderThickness="1" Background="LightGray">
+                                <Ellipse Width="20" Height="20" Fill="{Binding Owner, Converter={StaticResource playerToColorConverter}}"></Ellipse>
 
                             </Border>
                         </DataTemplate>

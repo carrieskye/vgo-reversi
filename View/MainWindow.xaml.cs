@@ -2,6 +2,7 @@
 using Model.Reversi;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -36,4 +37,36 @@ namespace View
             this.DataContext = board;
         }
     }
+
+
+    public class PlayerToColorConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value == null)
+            {
+                return "Transparant";
+            }
+            else
+            {
+                switch (value.ToString())
+                {
+                    case "B":
+                        return "Black";
+                    case "W":
+                        return "White";
+                    default:
+                        return "Transparant";
+                }
+            }
+        }
+
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+
+    }
+
 }
