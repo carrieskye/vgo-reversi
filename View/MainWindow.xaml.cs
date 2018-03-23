@@ -33,7 +33,7 @@ namespace View
 
             ReversiGame game = new ReversiGame(8, 8);
 
-            board = new BoardViewModel(game.Board);
+            board = new BoardViewModel(game);
             this.DataContext = board;
         }
     }
@@ -44,12 +44,12 @@ namespace View
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             var player = (Player)value;
-            
-            if ( player == Player.BLACK )
+
+            if (player == Player.BLACK)
             {
                 return Brushes.Black;
             }
-            else if ( player == Player.WHITE )
+            else if (player == Player.WHITE)
             {
                 return Brushes.White;
             }
