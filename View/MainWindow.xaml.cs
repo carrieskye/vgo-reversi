@@ -1,4 +1,5 @@
-﻿using DataStructures;
+﻿using Cells;
+using DataStructures;
 using Model.Reversi;
 using System;
 using System.Collections.Generic;
@@ -42,30 +43,25 @@ namespace View
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value == null)
+            var player = (Player)value;
+            
+            if ( player == Player.BLACK )
             {
-                return "Transparant";
+                return Brushes.Black;
+            }
+            else if ( player == Player.WHITE )
+            {
+                return Brushes.White;
             }
             else
             {
-                switch (value.ToString())
-                {
-                    case "B":
-                        return "Black";
-                    case "W":
-                        return "White";
-                    default:
-                        return "Transparant";
-                }
+                return Brushes.Transparent;
             }
         }
-
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }
-
     }
-
 }

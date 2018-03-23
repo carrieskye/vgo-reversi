@@ -13,7 +13,7 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Button}">
                         <Grid>
-                            <Ellipse x:Name="ellipse" Width="20" Height="20" Fill="{Binding Owner, Converter={StaticResource playerToColorConverter}}"/>
+                            <Ellipse x:Name="ellipse" Width="20" Height="20" Fill="{Binding Owner.Value, Converter={StaticResource playerToColorConverter}}"/>
                             <ContentControl HorizontalAlignment="Center" VerticalAlignment="Center" />
                         </Grid>
                         <ControlTemplate.Triggers>
@@ -27,7 +27,7 @@
         </Style>
         
     </Window.Resources>
-    <ItemsControl ItemsSource="{Binding Rows}">
+    <ItemsControl ItemsSource="{Binding Rows}" VerticalAlignment="Center" HorizontalAlignment="Center">
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
                 <StackPanel Orientation="Vertical" />
@@ -44,7 +44,7 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Border Width="32" Height="32" BorderBrush="Black" BorderThickness="1" Background="LightGray">
-                                <Button/>
+                                <Button Command="{Binding PutStoneCommand}"/>
 
                             </Border>
                         </DataTemplate>

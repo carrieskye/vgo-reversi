@@ -1,4 +1,5 @@
-﻿using DataStructures;
+﻿using Cells;
+using DataStructures;
 using Model.Reversi;
 using System;
 using System.Collections.Generic;
@@ -7,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
+using System.Windows.Input;
 
 namespace ViewModel
 {
@@ -26,7 +28,7 @@ namespace ViewModel
                 for (int j = 0; j < reversiBoard.Width; j++)
                 {
                     var position = new Vector2D(i, j);
-                    rows[i].Squares[j].Owner = reversiBoard[position];
+                    rows[i].Squares[j].Owner.Value = reversiBoard[position];
                 }
             }
         }
@@ -46,6 +48,36 @@ namespace ViewModel
 
     public class BoardSquareViewModel
     {
-        public Player Owner { get; set; }
+        public Cell<Player> Owner { get; set; }
+        public ICommand PutStoneCommand { get; }
+
+        public BoardSquareViewModel()
+        {
+            Owner = Cell.Create(Player.WHITE);
+            PutStoneCommand = new PutStoneCommand(this);
+        }
+        
+    }
+
+    public class PutStoneCommand : ICommand
+    {
+        public event EventHandler CanExecuteChanged;
+        public BoardSquareViewModel Square;
+
+        public PutStoneCommand(BoardSquareViewModel Square)
+        {
+            this.Square = Square;
+            
+        }
+
+        public bool CanExecute(object parameter)
+        {
+            return true;
+        }
+
+        public void Execute(object parameter)
+        {
+            Square.Owner.Value = Player.BLACK;
+        }
     }
 }
