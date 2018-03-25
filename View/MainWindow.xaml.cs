@@ -31,9 +31,7 @@ namespace View
         {
             InitializeComponent();
 
-            ReversiGame game = new ReversiGame(8, 8);
-
-            board = new BoardViewModel(game);
+            board = new BoardViewModel();
             this.DataContext = board;
         }
     }
