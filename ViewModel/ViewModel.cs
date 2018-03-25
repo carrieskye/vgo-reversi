@@ -3,39 +3,34 @@ using DataStructures;
 using Model.Reversi;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Data;
 using System.Windows.Input;
 
 namespace ViewModel
 {
     public class BoardViewModel
     {
-        public ReversiGame ReversiGame { get; private set; }
+        public Cell<ReversiGame> ReversiGame { get; private set; }
         public IList<BoardRowViewModel> Rows { get; private set; }
 
         public BoardViewModel()
         {
-            this.ReversiGame = new ReversiGame(8, 8);
-            Rows = Enumerable.Range(0, ReversiGame.Board.Height).Select(i => new BoardRowViewModel(this, i)).ToList().AsReadOnly();
+            this.ReversiGame = Cell.Create(new ReversiGame(8, 8));
+            Rows = Enumerable.Range(0, ReversiGame.Value.Board.Height).Select(i => new BoardRowViewModel(this, i)).ToList().AsReadOnly();
         }
 
         public void Update(ReversiGame game)
         {
-            this.ReversiGame = game;
-            Rows = Enumerable.Range(0, ReversiGame.Board.Height).Select(i => new BoardRowViewModel(this, i)).ToList().AsReadOnly();
-            foreach (var row in Rows)
-            {
-                foreach (var square in row.Squares)
-                {
-                    System.Diagnostics.Debug.Write(square.Owner);
-                }
-                System.Diagnostics.Debug.WriteLine("");
-            }
+            this.ReversiGame.Value = game;
             
+            for (int i = 0; i < ReversiGame.Value.Board.Height; i++)
+            {
+                for (int j = 0; j < ReversiGame.Value.Board.Width; j++)
+                {
+                    var position = new Vector2D(i, j);
+                    Rows[i].Squares[j].Owner.Value = ReversiGame.Value.Board[position];
+                }
+            }
         }
 
     }
@@ -49,7 +44,7 @@ namespace ViewModel
         public BoardRowViewModel(BoardViewModel board, int rowNumber)
         {
             this.rowNumber = rowNumber;
-            Squares = Enumerable.Range(0, board.ReversiGame.Board.Width).Select(i => new BoardSquareViewModel(board, rowNumber, i)).ToList().AsReadOnly();
+            Squares = Enumerable.Range(0, board.ReversiGame.Value.Board.Width).Select(i => new BoardSquareViewModel(board, rowNumber, i)).ToList().AsReadOnly();
         }
     }
 
@@ -62,8 +57,8 @@ namespace ViewModel
         public BoardSquareViewModel(BoardViewModel board, int rowNumber, int columnNumber)
         {
             this.position = new Vector2D(rowNumber, columnNumber);
-            Owner = Cell.Create(board.ReversiGame.Board[position]);
-            PutStoneCommand = new PutStoneCommand(board, this, position);
+            Owner = Cell.Create(board.ReversiGame.Value.Board[position]);
+            PutStoneCommand = new PutStoneCommand(board, position);
         }
     }
 
@@ -72,13 +67,11 @@ namespace ViewModel
         private readonly Vector2D position;
 
         public event EventHandler CanExecuteChanged;
-        public BoardSquareViewModel Square;
         public BoardViewModel Board;
 
-        public PutStoneCommand(BoardViewModel board, BoardSquareViewModel Square, Vector2D position)
+        public PutStoneCommand(BoardViewModel board, Vector2D position)
         {
             this.Board = board;
-            this.Square = Square;
             this.position = position;
         }
 
@@ -89,7 +82,7 @@ namespace ViewModel
 
         public void Execute(object parameter)
         {
-            Board.Update(Board.ReversiGame.PutStone(position));
+            Board.Update(Board.ReversiGame.Value.PutStone(position));
         }
     }
 }
