@@ -10,29 +10,15 @@ namespace ViewModel
 {
     public class BoardViewModel
     {
-        public Cell<ReversiGame> ReversiGame { get; private set; }
-        public Cell<ReversiBoard> ReversiBoard { get; private set; }
-        public IList<BoardRowViewModel> Rows { get; private set; }
+        public Cell<ReversiGame> ReversiGame { get; }
+        public Cell<ReversiBoard> ReversiBoard { get; }
+        public IList<BoardRowViewModel> Rows { get; }
 
         public BoardViewModel()
         {
             this.ReversiGame = Cell.Create(new ReversiGame(8, 8));
             this.ReversiBoard = Cell.Derive(ReversiGame, g => g.Board);
-            Rows = Enumerable.Range(0, ReversiGame.Value.Board.Height).Select(i => new BoardRowViewModel(ReversiBoard, i)).ToList().AsReadOnly();
-        }
-        
-        public void Update(ReversiGame game)
-        {
-            this.ReversiGame.Value = game;
-            
-            for (int i = 0; i < ReversiGame.Value.Board.Height; i++)
-            {
-                for (int j = 0; j < ReversiGame.Value.Board.Width; j++)
-                {
-                    var position = new Vector2D(i, j);
-                    Rows[i].Squares[j].Owner.Value = ReversiGame.Value.Board[position];
-                }
-            }
+            Rows = Enumerable.Range(0, ReversiGame.Value.Board.Height).Select(i => new BoardRowViewModel(this.ReversiGame, i)).ToList().AsReadOnly();
         }
 
     }
@@ -43,10 +29,10 @@ namespace ViewModel
 
         public IList<BoardSquareViewModel> Squares { get; private set; }
 
-        public BoardRowViewModel(Cell<ReversiBoard> board, int rowNumber)
+        public BoardRowViewModel(Cell<ReversiGame> game, int rowNumber)
         {
             this.rowNumber = rowNumber;
-            Squares = Enumerable.Range(0, board.Value.Width).Select(i => new BoardSquareViewModel(board, rowNumber, i)).ToList().AsReadOnly();
+            Squares = Enumerable.Range(0, game.Value.Board.Width).Select(i => new BoardSquareViewModel(game, rowNumber, i)).ToList().AsReadOnly();
         }
     }
 
@@ -56,26 +42,26 @@ namespace ViewModel
         public Cell<Player> Owner { get; set; }
         public ICommand PutStoneCommand { get; }
 
-        public BoardSquareViewModel(Cell<ReversiBoard> board, int rowNumber, int columnNumber)
+        public BoardSquareViewModel(Cell<ReversiGame> game, int rowNumber, int columnNumber)
         {
             this.position = new Vector2D(rowNumber, columnNumber);
-            Owner = Cell.Derive(board, b => b[position]);
-            PutStoneCommand = new PutStoneCommand(Owner, position);
+            Owner = Cell.Derive(game, g => g.Board[position]);
+            PutStoneCommand = new PutStoneCommand(game, position);
         }
     }
 
     public class PutStoneCommand : ICommand
     {
         private readonly Vector2D position;
-        public Cell<Player> Owner;
         public event EventHandler CanExecuteChanged;
-        public BoardViewModel Board;
+        private readonly Cell<ReversiGame> game;
 
-        public PutStoneCommand(Cell<Player> Owner, Vector2D position)
+        public PutStoneCommand(Cell<ReversiGame> game, Vector2D position)
         {
             this.position = position;
+            this.game = game;
 
-            Owner.ValueChanged += () => CanExecuteChanged(this, new EventArgs());
+            game.ValueChanged += () => CanExecuteChanged(this, new EventArgs());
         }
 
         public bool CanExecute(object parameter)
@@ -85,8 +71,7 @@ namespace ViewModel
 
         public void Execute(object parameter)
         {
-            
-            Board.Update(Board.ReversiGame.Value.PutStone(position));
+            game.Value = game.Value.PutStone(position);
         }
     }
 }
