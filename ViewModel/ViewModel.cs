@@ -11,23 +11,19 @@ namespace ViewModel
     public class BoardViewModel
     {
         public Cell<ReversiGame> ReversiGame { get; }
-        public Cell<ReversiBoard> ReversiBoard { get; }
         public IList<BoardRowViewModel> Rows { get; }
 
         public BoardViewModel()
         {
             this.ReversiGame = Cell.Create(new ReversiGame(8, 8));
-            this.ReversiBoard = Cell.Derive(ReversiGame, g => g.Board);
             Rows = Enumerable.Range(0, ReversiGame.Value.Board.Height).Select(i => new BoardRowViewModel(this.ReversiGame, i)).ToList().AsReadOnly();
         }
-
     }
 
     public class BoardRowViewModel
     {
         private readonly int rowNumber;
-
-        public IList<BoardSquareViewModel> Squares { get; private set; }
+        public IList<BoardSquareViewModel> Squares { get; }
 
         public BoardRowViewModel(Cell<ReversiGame> game, int rowNumber)
         {
@@ -66,12 +62,16 @@ namespace ViewModel
 
         public bool CanExecute(object parameter)
         {
-            return true;
+            return game.Value.IsValidMove(position);
         }
 
         public void Execute(object parameter)
         {
             game.Value = game.Value.PutStone(position);
+            if (game.Value.IsGameOver)
+            {
+                
+            }
         }
     }
 }

@@ -21,36 +21,45 @@
                                 <Setter Property="Fill" Value="LightPink" TargetName="ellipse"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
+
+
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
-        
-    </Window.Resources>
-    <ItemsControl ItemsSource="{Binding Rows}" VerticalAlignment="Center" HorizontalAlignment="Center">
-        <ItemsControl.ItemsPanel>
-            <ItemsPanelTemplate>
-                <StackPanel Orientation="Vertical" />
-            </ItemsPanelTemplate>
-        </ItemsControl.ItemsPanel>
-        <ItemsControl.ItemTemplate>
-            <DataTemplate>
-                <ItemsControl ItemsSource="{Binding Squares}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel Orientation="Horizontal"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Border Width="32" Height="32" BorderBrush="Black" BorderThickness="1" Background="LightGray">
-                                <Button Command="{Binding PutStoneCommand}"/>
 
-                            </Border>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </DataTemplate>
-        </ItemsControl.ItemTemplate>
-    </ItemsControl>
+    </Window.Resources>
+    <StackPanel>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <TextBlock>Current player: </TextBlock>
+            <Ellipse HorizontalAlignment="Left" Width="12" Height="12" Margin="5,0,0,0" Fill="{Binding ReversiGame.Value.CurrentPlayer, Converter={StaticResource playerToColorConverter}}"/>
+        </StackPanel>
+
+        <ItemsControl ItemsSource="{Binding Rows}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,10,0,0">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Vertical" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <ItemsControl ItemsSource="{Binding Squares}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Width="32" Height="32" BorderBrush="Black" BorderThickness="1" Background="LightGray">
+                                    <Button Command="{Binding PutStoneCommand}"/>
+
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </StackPanel>
 </Window>
