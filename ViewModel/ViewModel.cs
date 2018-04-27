@@ -12,10 +12,14 @@ namespace ViewModel
     {
         public Cell<ReversiGame> ReversiGame { get; }
         public IList<BoardRowViewModel> Rows { get; }
+        public Cell<int> ScoreCurrentPlayer { get; }
+        public Cell<int> ScoreOtherPlayer { get; }
 
         public BoardViewModel()
         {
             this.ReversiGame = Cell.Create(new ReversiGame(8, 8));
+            this.ScoreCurrentPlayer = Cell.Derive(ReversiGame, g => g.Board.CountStones(g.CurrentPlayer));
+            this.ScoreOtherPlayer = Cell.Derive(ReversiGame, g => g.Board.CountStones(g.CurrentPlayer.OtherPlayer));
             Rows = Enumerable.Range(0, ReversiGame.Value.Board.Height).Select(i => new BoardRowViewModel(this.ReversiGame, i)).ToList().AsReadOnly();
         }
     }
