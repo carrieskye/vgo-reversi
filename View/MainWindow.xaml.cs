@@ -64,7 +64,31 @@ namespace View
             throw new NotImplementedException();
         }
     }
+    public class TypeToOpacityConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            var type = (string)value;
 
+            if (type.Equals("owner"))
+            {
+                return 1;
+            }
+            else if (type.Equals("candidate"))
+            {
+                return 0.4;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
     public class GameOverToGameOverVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

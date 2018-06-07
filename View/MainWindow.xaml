@@ -9,24 +9,27 @@
         Title="Reversi">
     <Window.Resources>
         <local:PlayerToColorConverter x:Key="playerToColorConverter" />
+        <local:TypeToOpacityConverter x:Key="typeToOpacityConverter"/>
         <local:GameOverToGameOverVisibilityConverter x:Key="gameOverToGameOverVisibilityConverter"/>
         <local:GameOverToScoreVisibilityConverter x:Key="gameOverToScoreVisibilityConverter"/>
         <local:WinnerToVisibilityConverter x:Key="winnerToVisibilityConverter"/>
+
         <Style TargetType="Ellipse">
             <Setter Property="Width" Value="20"/>
             <Setter Property="Height" Value="20"/>
         </Style>
+
         <Style x:Key="stoneStyle" TargetType="{x:Type Button}">
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Button}">
                         <Grid>
-                            <Ellipse x:Name="ellipse" Fill="{Binding Owner.Value, Converter={StaticResource playerToColorConverter}}" Width="20" Height="20"/>
+                            <Ellipse x:Name="ellipse" Fill="{Binding Owner.Value, Converter={StaticResource playerToColorConverter}}" Opacity="{Binding Type.Value, Converter={StaticResource typeToOpacityConverter}}" Width="20" Height="20"/>
                             <ContentControl HorizontalAlignment="Center" VerticalAlignment="Center" />
                         </Grid>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Fill" Value="{Binding CurrentPlayer.Value, Converter={StaticResource playerToColorConverter}}" TargetName="ellipse"/>
+                                <Setter Property="Opacity" Value="1" TargetName="ellipse"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -50,14 +53,14 @@
                 <TextBlock Text="{Binding GameOverMessage.Value}" FontSize="14"></TextBlock>
             </StackPanel>
         </StackPanel>
-        
+
         <StackPanel Name="Score" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding IsGameOver.Value, Converter={StaticResource gameOverToScoreVisibilityConverter}}">
             <Ellipse Fill="{Binding ReversiGame.Value.CurrentPlayer, Converter={StaticResource playerToColorConverter}}"/>
             <TextBlock Text="{Binding Path=ScoreCurrentPlayer.Value, StringFormat='\{0\} (playing) - '}"></TextBlock>
             <Ellipse Fill="{Binding ReversiGame.Value.CurrentPlayer.OtherPlayer, Converter={StaticResource playerToColorConverter}}"/>
             <TextBlock Text="{Binding ScoreOtherPlayer.Value}"></TextBlock>
         </StackPanel>
-        
+
         <ItemsControl Name="Board" ItemsSource="{Binding Rows}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,10,0,0">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>

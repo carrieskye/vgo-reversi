@@ -48,8 +48,9 @@ namespace ViewModel
             if (GetWinner(game) == null)
             {
                 message += "Tie score of " + ScoreCurrentPlayer.Value + " - " + ScoreOtherPlayer.Value;
-                
-            }else
+
+            }
+            else
             {
                 message += "won with " + game.Board.CountStones(GetWinner(game)) + " - " + game.Board.CountStones(GetWinner(game).OtherPlayer);
             }
@@ -73,15 +74,42 @@ namespace ViewModel
     {
         private readonly Vector2D position;
         public Cell<Player> Owner { get; set; }
+        public Cell<string> Type { get; set; }
         public Cell<Player> CurrentPlayer { get; }
         public ICommand PutStoneCommand { get; }
 
         public BoardSquareViewModel(Cell<ReversiGame> game, int rowNumber, int columnNumber)
         {
             this.position = new Vector2D(rowNumber, columnNumber);
-            Owner = Cell.Derive(game, g => g.Board[position]);
+            Owner = Cell.Derive(game, g => SetOwnerOrCandidate(g));
+            Type = Cell.Derive(game, g => SetType(g));
             CurrentPlayer = Cell.Derive(game, g => g.CurrentPlayer);
             PutStoneCommand = new PutStoneCommand(game, position);
+        }
+
+        private Player SetOwnerOrCandidate(ReversiGame game)
+        {
+            if (game.Board[position] != null)
+            {
+                return game.Board[position];
+            }
+            else if (game.IsValidMove(position))
+            {
+                return game.CurrentPlayer;
+            }
+            else { return null; }
+        }
+
+        private string SetType(ReversiGame game)
+        {
+            if (game.Board[position] != null)
+            {
+                return "owner";
+            }
+            else
+            {
+                return "candidate";
+            }
         }
     }
 
