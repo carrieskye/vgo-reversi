@@ -27,11 +27,13 @@ namespace View
     {
         private BoardViewModel board;
 
-        public MainWindow()
+        public MainWindow(int dimension)
         {
             InitializeComponent();
+            this.Height = dimension * 32 + 100;
+            this.Width = dimension * 32 + 100;
 
-            board = new BoardViewModel();
+            board = new BoardViewModel(dimension);
             this.DataContext = board;
         }
     }
