@@ -26,13 +26,14 @@
                         </Grid>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Fill" Value="Gray" TargetName="ellipse"/>
+                                <Setter Property="Fill" Value="{Binding CurrentPlayer.Value, Converter={StaticResource playerToColorConverter}}" TargetName="ellipse"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
+
         <Style TargetType="{x:Type TextBlock}">
             <Setter Property="Margin" Value="5,5,5,0"/>
             <Setter Property="FontSize" Value="20"/>

@@ -73,12 +73,14 @@ namespace ViewModel
     {
         private readonly Vector2D position;
         public Cell<Player> Owner { get; set; }
+        public Cell<Player> CurrentPlayer { get; }
         public ICommand PutStoneCommand { get; }
 
         public BoardSquareViewModel(Cell<ReversiGame> game, int rowNumber, int columnNumber)
         {
             this.position = new Vector2D(rowNumber, columnNumber);
             Owner = Cell.Derive(game, g => g.Board[position]);
+            CurrentPlayer = Cell.Derive(game, g => g.CurrentPlayer);
             PutStoneCommand = new PutStoneCommand(game, position);
         }
     }
