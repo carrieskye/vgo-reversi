@@ -21,11 +21,14 @@ namespace ViewModel
         public BoardViewModel(int dimension)
         {
             this.ReversiGame = Cell.Create(new ReversiGame(dimension, dimension));
+
             this.ScoreCurrentPlayer = Cell.Derive(ReversiGame, g => g.Board.CountStones(g.CurrentPlayer));
             this.ScoreOtherPlayer = Cell.Derive(ReversiGame, g => g.Board.CountStones(g.CurrentPlayer.OtherPlayer));
+
             this.IsGameOver = Cell.Derive(ReversiGame, g => g.IsGameOver);
             this.Winner = Cell.Derive(ReversiGame, g => GetWinner(g));
             this.GameOverMessage = Cell.Derive(ReversiGame, g => CreateGameOverMessage(g));
+
             Rows = Enumerable.Range(0, ReversiGame.Value.Board.Height).Select(i => new BoardRowViewModel(this.ReversiGame, i)).ToList().AsReadOnly();
         }
 
@@ -75,7 +78,6 @@ namespace ViewModel
         private readonly Vector2D position;
         public Cell<Player> Owner { get; set; }
         public Cell<string> Type { get; set; }
-        public Cell<Player> CurrentPlayer { get; }
         public ICommand PutStoneCommand { get; }
 
         public BoardSquareViewModel(Cell<ReversiGame> game, int rowNumber, int columnNumber)
@@ -83,7 +85,6 @@ namespace ViewModel
             this.position = new Vector2D(rowNumber, columnNumber);
             Owner = Cell.Derive(game, g => SetOwnerOrCandidate(g));
             Type = Cell.Derive(game, g => SetType(g));
-            CurrentPlayer = Cell.Derive(game, g => g.CurrentPlayer);
             PutStoneCommand = new PutStoneCommand(game, position);
         }
 
@@ -102,14 +103,7 @@ namespace ViewModel
 
         private string SetType(ReversiGame game)
         {
-            if (game.Board[position] != null)
-            {
-                return "owner";
-            }
-            else
-            {
-                return "candidate";
-            }
+            return game.Board[position] != null ? "owner" : "candidate";
         }
     }
 
