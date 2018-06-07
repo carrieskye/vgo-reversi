@@ -22,7 +22,7 @@
 
     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
         <TextBlock Text="{Binding Path=DimensionString.Value, StringFormat= 'Dimension:&#x0a;\{0\}'}" Style="{StaticResource blockStyle}"/>
-        <Slider Minimum="4" Maximum="18" TickFrequency="2" IsSnapToTickEnabled="True" Value="{Binding Path=Dimension.Value}"/>
+        <Slider Minimum="2" Maximum="18" TickFrequency="2" IsSnapToTickEnabled="True" Value="{Binding Path=Dimension.Value}"/>
         <Button Content="Start" Style="{StaticResource buttonStyle}" Click="StartGame" />
     </StackPanel> 
 </Window>

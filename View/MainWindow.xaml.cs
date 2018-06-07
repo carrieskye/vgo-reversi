@@ -30,7 +30,7 @@ namespace View
         public MainWindow(int dimension)
         {
             InitializeComponent();
-            this.Height = dimension * 32 + 100;
+            this.Height = dimension * 32 + 120;
             this.Width = dimension * 32 + 100;
 
             board = new BoardViewModel(dimension);
@@ -56,6 +56,69 @@ namespace View
             else
             {
                 return Brushes.Transparent;
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class GameOverToGameOverVisibilityConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            var gameOver = (bool)value;
+            if (gameOver == true)
+            {
+                return "Visible";
+            }
+            else
+            {
+                return "Collapsed";
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class GameOverToScoreVisibilityConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            var gameOver = (bool)value;
+            if (gameOver == true)
+            {
+                return "Collapsed";
+            }
+            else
+            {
+                return "Visible";
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class WinnerToVisibilityConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            var winner = (Player)value;
+            if (winner == null)
+            {
+                return "Collapsed";
+            }
+            else
+            {
+                return "Visible";
             }
         }
 

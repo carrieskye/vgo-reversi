@@ -39,7 +39,7 @@ namespace Model.Reversi
         /// <summary>
         /// True is the game is over, false otherwise.
         /// </summary>
-        public bool IsGameOver => CurrentPlayer == null;
+        public bool IsGameOver => !Board.HasValidMoves(CurrentPlayer) && !Board.HasValidMoves(CurrentPlayer.OtherPlayer);
 
         /// <summary>
         /// Returns <code>true</code> if the current player is allowed to place
@@ -86,7 +86,7 @@ namespace Model.Reversi
                 }
                 else
                 {
-                    return new ReversiGame(updatedBoard, null);
+                    return new ReversiGame(updatedBoard, CurrentPlayer);
                 }
             }
         }
