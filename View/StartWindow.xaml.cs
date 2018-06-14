@@ -2,10 +2,6 @@
 using System.Windows.Input;
 using System.Text.RegularExpressions;
 using ViewModel;
-using System.Windows.Data;
-using System;
-using System.Globalization;
-using System.Windows.Media;
 
 namespace View
 {
@@ -15,7 +11,6 @@ namespace View
     public partial class StartWindow : Window
     {
         private StartViewModel startViewModel;
-        private ColorSelectionViewModel colorViewModel;
 
         public StartWindow()
         {
@@ -56,21 +51,6 @@ namespace View
             MainWindow gameWindow = new MainWindow(startViewModel.Dimension.Value, startViewModel.NamePlayer1.Value, startViewModel.NamePlayer2.Value, startViewModel.ColorPlayer1.Value, startViewModel.ColorPlayer2.Value);
             gameWindow.Show();
             this.Close();
-        }
-    }
-
-    public class StringToColorConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            var color = (string)value;
-            BrushConverter brushConverter = new BrushConverter();
-            return (Brush) brushConverter.ConvertFrom(color);
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
         }
     }
 }
