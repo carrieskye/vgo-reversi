@@ -1,6 +1,4 @@
 ﻿using System.Windows;
-using System.Windows.Input;
-using System.Text.RegularExpressions;
 using ViewModel;
 
 namespace View
@@ -18,12 +16,6 @@ namespace View
 
             startViewModel = new StartViewModel();
             this.DataContext = startViewModel;
-        }
-
-        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
-        {
-            Regex regex = new Regex("[^0-9]+");
-            e.Handled = regex.IsMatch(e.Text);
         }
 
         private void ShowColorsPlayer1(object sender, RoutedEventArgs e)

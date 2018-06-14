@@ -5,6 +5,7 @@ namespace ViewModel
 {
     public class StartViewModel
     {
+        public string Text { get; }
         public Cell<int> Dimension { get; }
         public Cell<string> NamePlayer1 { get; }
         public Cell<string> NamePlayer2 { get; }
@@ -16,8 +17,8 @@ namespace ViewModel
 
         public StartViewModel()
         {
-            this.NamePlayer1 = Cell.Create("Player 1");
-            this.NamePlayer2 = Cell.Create("Player 2");
+            this.NamePlayer1 = Cell.Create("");
+            this.NamePlayer2 = Cell.Create("");
 
             this.ColorSelectionPlayer1 = new ColorSelectionViewModel("Black");
             this.ColorSelectionPlayer2 = new ColorSelectionViewModel("White");

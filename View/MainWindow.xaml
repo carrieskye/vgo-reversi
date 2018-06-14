@@ -55,7 +55,7 @@
     </Window.Resources>
 
 
-    <StackPanel Background="Gray">
+    <StackPanel Background="LightGray">
         <StackPanel Name="GameOver" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="40,10,0,0" Visibility="{Binding IsGameOver.Value, Converter={StaticResource gameOverToGameOverVisibilityConverter}}">
             <TextBlock Text="Game over!" FontSize="20" MaxWidth="200"/>
             <TextBlock Text="{Binding GameOverMessage.Value}"  MaxWidth="200"></TextBlock>
@@ -93,7 +93,7 @@
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Border Width="32" Height="32" BorderBrush="Black" BorderThickness="1" Background="LightGray">
+                                <Border Width="32" Height="32" BorderBrush="Black" BorderThickness="1">
                                     <Button Command="{Binding PutStoneCommand}" Style="{StaticResource stoneStyle}"/>
                                 </Border>
                             </DataTemplate>

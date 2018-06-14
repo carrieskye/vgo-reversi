@@ -79,4 +79,23 @@ namespace View
             throw new NotImplementedException();
         }
     }
+
+    public class NameAndColorValidationConverter : IMultiValueConverter
+    {
+        public object Convert(object[] values, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            string name1 = (string)values[0];
+            string name2 = (string)values[1];
+            string color1 = (string)values[2];
+            string color2 = (string)values[3];
+            if (string.IsNullOrEmpty(name1.Trim()) || string.IsNullOrEmpty(name2.Trim())) return false;
+            if (name1.Equals(name2) || color1.Equals(color2)) return false;
+            return true;
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

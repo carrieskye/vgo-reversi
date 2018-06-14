@@ -20,19 +20,12 @@
             <Setter Property="Width" Value="120"/>
         </Style>
 
-        <Style x:Key="buttonStyle" TargetType="{x:Type Button}">
-            <Setter Property="FontSize" Value="16"/>
-            <Setter Property="Margin" Value="40"/>
-            <Setter Property="Width" Value="70"/>
-            <Setter Property="Height" Value="30"/>
-        </Style>
-
         <Style x:Key="colorsPlayer1" TargetType="{x:Type Button}">
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate>
                         <Grid>
-                            <Ellipse x:Name="ellipse" Fill="{Binding Path=ColorPlayer1.Value, Converter={StaticResource stringToColorConverter}}" Width="20" Height="20"/>
+                            <Ellipse x:Name="ColorPlayer1Ellipse" Fill="{Binding Path=ColorPlayer1.Value, Converter={StaticResource stringToColorConverter}}" Width="20" Height="20"/>
                             <ContentControl HorizontalAlignment="Center" VerticalAlignment="Center" />
                         </Grid>
                     </ControlTemplate>
@@ -45,7 +38,7 @@
                 <Setter.Value>
                     <ControlTemplate>
                         <Grid>
-                            <Ellipse x:Name="ellipse" Fill="{Binding Path=ColorPlayer2.Value, Converter={StaticResource stringToColorConverter}}" Width="20" Height="20"/>
+                            <Ellipse x:Name="ColorPlayer2Ellipse" Fill="{Binding Path=ColorPlayer2.Value, Converter={StaticResource stringToColorConverter}}" Width="20" Height="20"/>
                             <ContentControl HorizontalAlignment="Center" VerticalAlignment="Center" />
                         </Grid>
                     </ControlTemplate>
@@ -71,6 +64,27 @@
             </Setter>
         </Style>
 
+        <Style x:Key="startButton" TargetType="{x:Type Button}">
+            <Style.Resources>
+                <local:NameAndColorValidationConverter x:Key="nameAndColorValidationConverter" />
+            </Style.Resources>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Margin" Value="40"/>
+            <Setter Property="Width" Value="70"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="IsEnabled" Value="false" />
+            <Setter Property="IsEnabled">
+                <Setter.Value>
+                    <MultiBinding Converter="{StaticResource nameAndColorValidationConverter}">
+                        <Binding Path="NamePlayer1.Value"/>
+                        <Binding Path="NamePlayer2.Value"/>
+                        <Binding Path="ColorPlayer1.Value"/>
+                        <Binding Path="ColorPlayer2.Value"/>
+                    </MultiBinding>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
     </Window.Resources>
 
     <StackPanel Background="LightGray">
@@ -92,7 +106,7 @@
             <TextBlock Grid.Row="0" Grid.Column="2" Text="Color"/>
 
             <TextBlock Grid.Row="1" Grid.Column="0" Text="Player 1:"/>
-            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding NamePlayer1.Value}"/>
+            <TextBox Grid.Row="1" Grid.Column="1" Name="NamePlayer1Box" Text="{Binding NamePlayer1.Value}"/>
             <Button Grid.Row="1" Grid.Column="2" Click="ShowColorsPlayer1" Style="{StaticResource colorsPlayer1}"/>
             <Popup Name="ColorSelectionPlayer1" Placement="Mouse">
                 <Grid>
@@ -123,9 +137,9 @@
                     </ItemsControl>
                 </Grid>
             </Popup>
-            
+
             <TextBlock Grid.Row="2" Grid.Column="0" Text="Player 2:"/>
-            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding NamePlayer2.Value}"/>
+            <TextBox Grid.Row="2" Grid.Column="1" Name="NamePlayer2Box" Text="{Binding NamePlayer2.Value}"/>
             <Button Grid.Row="2" Grid.Column="2" Click="ShowColorsPlayer2" Style="{StaticResource colorsPlayer2}"/>
             <Popup Name="ColorSelectionPlayer2" Placement="Mouse">
                 <Grid>
@@ -163,6 +177,6 @@
             <Slider Grid.Row="4" Grid.Column="1" Minimum="2" Maximum="18" TickFrequency="2" IsSnapToTickEnabled="True" Value="{Binding Path=Dimension.Value}"/>
         </Grid>
 
-        <Button Content="Start" Style="{StaticResource buttonStyle}" Click="StartGame" />
+        <Button Content="Start" Style="{StaticResource startButton}" Click="StartGame" />
     </StackPanel>
 </Window>

@@ -29,7 +29,6 @@ namespace ViewModel
             Row3 = new List<string> { "Peru", "White", "Gray", "Black" };
             Colors = new List<List<string>>() { Row1, Row2, Row3 };
         }
-
     }
 
     public class ColorSelectionRowViewModel
@@ -56,7 +55,6 @@ namespace ViewModel
             Color = Cell.Create(color);
             SelectColorCommand = new SelectColorCommand(chosenColor, color);
         }
-
     }
 
     public class SelectColorCommand : ICommand
