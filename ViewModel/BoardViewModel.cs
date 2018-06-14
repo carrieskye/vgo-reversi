@@ -18,11 +18,13 @@ namespace ViewModel
         public Cell<Player> Winner { get; }
         public Cell<string> GameOverMessage { get; }
 
-        public BoardViewModel(int dimension, string namePlayer1, string namePlayer2)
+        public BoardViewModel(int dimension, string namePlayer1, string namePlayer2, string colorPlayer1, string colorPlayer2)
         {
             this.ReversiGame = Cell.Create(new ReversiGame(dimension, dimension));
             this.ReversiGame.Value.CurrentPlayer.Name = namePlayer1;
             this.ReversiGame.Value.CurrentPlayer.OtherPlayer.Name = namePlayer2;
+            this.ReversiGame.Value.CurrentPlayer.Color = colorPlayer1;
+            this.ReversiGame.Value.CurrentPlayer.OtherPlayer.Color = colorPlayer2;
 
             this.Player1ScoreBar = Cell.Derive(ReversiGame, g => ScoreBarSize(g.Board.CountStones(g.FirstPlayer), dimension));
             this.Player2ScoreBar = Cell.Derive(ReversiGame, g => ScoreBarSize(g.Board.CountStones(g.FirstPlayer.OtherPlayer), dimension));

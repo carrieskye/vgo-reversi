@@ -15,7 +15,7 @@ namespace View
     {
         private BoardViewModel board;
 
-        public MainWindow(int dimension, string namePlayer1, string namePlayer2)
+        public MainWindow(int dimension, string namePlayer1, string namePlayer2, string colorPlayer1, string colorPlayer2)
         {
             InitializeComponent();
             this.Height = dimension * 32 + 160;
@@ -25,7 +25,7 @@ namespace View
                 this.Width = 228;
             }
 
-            board = new BoardViewModel(dimension, namePlayer1, namePlayer2);
+            board = new BoardViewModel(dimension, namePlayer1, namePlayer2, colorPlayer1, colorPlayer2);
             this.DataContext = board;
         }
     }
@@ -56,6 +56,7 @@ namespace View
             throw new NotImplementedException();
         }
     }
+
     public class TypeToOpacityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

@@ -8,6 +8,7 @@
         Title="Reversi">
     <Window.Resources>
         <local:PlayerToColorConverter x:Key="playerToColorConverter" />
+        <local:StringToColorConverter x:Key="stringToColorConverter" />
         <local:TypeToOpacityConverter x:Key="typeToOpacityConverter"/>
         <local:GameOverToGameOverVisibilityConverter x:Key="gameOverToGameOverVisibilityConverter"/>
         <local:GameOverToScoreVisibilityConverter x:Key="gameOverToScoreVisibilityConverter"/>
@@ -32,7 +33,7 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Button}">
                         <Grid>
-                            <Ellipse x:Name="ellipse" Fill="{Binding Owner.Value, Converter={StaticResource playerToColorConverter}}" Opacity="{Binding Type.Value, Converter={StaticResource typeToOpacityConverter}}" Width="20" Height="20"/>
+                            <Ellipse x:Name="ellipse" Fill="{Binding Owner.Value.Color, Converter={StaticResource stringToColorConverter}}" Opacity="{Binding Type.Value, Converter={StaticResource typeToOpacityConverter}}" Width="20" Height="20"/>
                             <ContentControl HorizontalAlignment="Center" VerticalAlignment="Center" />
                         </Grid>
                         <ControlTemplate.Triggers>
@@ -71,10 +72,10 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding ReversiGame.Value.FirstPlayer.Name}" Foreground="{Binding ReversiGame.Value.FirstPlayer, Converter={StaticResource playerToColorConverter}}"/>
-            <Rectangle Grid.Row="0" Grid.Column="1" Width="{Binding Player1ScoreBar.Value}" Fill="{Binding ReversiGame.Value.FirstPlayer, Converter={StaticResource playerToColorConverter}}"/>
+            <Rectangle Grid.Row="0" Grid.Column="1" Width="{Binding Player1ScoreBar.Value}" Fill="{Binding ReversiGame.Value.FirstPlayer.Color, Converter={StaticResource stringToColorConverter}}"/>
 
             <TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding ReversiGame.Value.FirstPlayer.OtherPlayer.Name}" Foreground="{Binding ReversiGame.Value.FirstPlayer.OtherPlayer, Converter={StaticResource playerToColorConverter}}"/>
-            <Rectangle Grid.Row="1" Grid.Column="1" Width="{Binding Player2ScoreBar.Value}" Fill="{Binding ReversiGame.Value.FirstPlayer.OtherPlayer, Converter={StaticResource playerToColorConverter}}"/>
+            <Rectangle Grid.Row="1" Grid.Column="1" Width="{Binding Player2ScoreBar.Value}" Fill="{Binding ReversiGame.Value.FirstPlayer.OtherPlayer.Color, Converter={StaticResource stringToColorConverter}}"/>
         </Grid>
 
         <ItemsControl Name="Board" ItemsSource="{Binding Rows}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,10,0,0">

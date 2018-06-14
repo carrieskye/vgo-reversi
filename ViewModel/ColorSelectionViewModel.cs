@@ -11,26 +11,23 @@ namespace ViewModel
     public class ColorSelectionViewModel
     {
         public IList<ColorSelectionRowViewModel> Rows { get; }
-        public List<string> Row1 = new List<string>{
-            "Yellow", "Orange", "Red", "DarkRed"
-        };
-        public List<string> Row2 = new List<string>{
-               "GreenYellow", "Turquoise","CornflowerBlue", "DarkOrchid"
-            };
-
-        public List<string> Row3 = new List<string>
-            {
-               "Peru", "White", "Gray", "Black"
-        };
+        public List<string> Row1, Row2, Row3;
         public List<List<string>> Colors;
+        public Cell<string> ChosenColor;
 
-        public ColorSelectionViewModel(Cell<Player> player)
+        public ColorSelectionViewModel(string initialColor)
         {
-            Colors = new List<List<string>>()
-            {
-                Row1, Row2, Row3
-            };
-            Rows = Enumerable.Range(0, Colors.Count).Select(i => new ColorSelectionRowViewModel(player, i, Colors[i])).ToList().AsReadOnly();
+            InitializeColors();
+            ChosenColor = Cell.Create(initialColor);
+            Rows = Enumerable.Range(0, Colors.Count).Select(i => new ColorSelectionRowViewModel(ChosenColor, i, Colors[i])).ToList().AsReadOnly();
+        }
+
+        private void InitializeColors()
+        {
+            Row1 = new List<string> { "Yellow", "Orange", "Red", "DarkRed" };
+            Row2 = new List<string> { "GreenYellow", "Turquoise", "CornflowerBlue", "DarkOrchid" };
+            Row3 = new List<string> { "Peru", "White", "Gray", "Black" };
+            Colors = new List<List<string>>() { Row1, Row2, Row3 };
         }
 
     }
@@ -40,10 +37,10 @@ namespace ViewModel
         private readonly int rowNumber;
         public IList<ColorSelectionSquareViewModel> Squares { get; }
 
-        public ColorSelectionRowViewModel(Cell<Player> player, int rowNumber, List<string> rowColors)
+        public ColorSelectionRowViewModel(Cell<string> chosenColor, int rowNumber, List<string> rowColors)
         {
             this.rowNumber = rowNumber;
-            Squares = Enumerable.Range(0, rowColors.Count).Select(i => new ColorSelectionSquareViewModel(player, rowNumber, i, rowColors[i])).ToList().AsReadOnly();
+            Squares = Enumerable.Range(0, rowColors.Count).Select(i => new ColorSelectionSquareViewModel(chosenColor, rowNumber, i, rowColors[i])).ToList().AsReadOnly();
         }
     }
 
@@ -53,27 +50,27 @@ namespace ViewModel
         public Cell<string> Color { get; set; }
         public ICommand SelectColorCommand { get; }
 
-        public ColorSelectionSquareViewModel(Cell<Player> player, int rowNumber, int columnNumber, string color)
+        public ColorSelectionSquareViewModel(Cell<string> chosenColor, int rowNumber, int columnNumber, string color)
         {
             this.position = new Vector2D(rowNumber, columnNumber);
             Color = Cell.Create(color);
-            SelectColorCommand = new SelectColorCommand(player, position);
+            SelectColorCommand = new SelectColorCommand(chosenColor, color);
         }
 
     }
 
     public class SelectColorCommand : ICommand
     {
-        private readonly Vector2D position;
         public event EventHandler CanExecuteChanged;
-        private readonly Cell<Player> player;
+        private readonly Cell<string> chosenColor;
+        private readonly string color;
 
-        public SelectColorCommand(Cell<Player> player, Vector2D position)
+        public SelectColorCommand(Cell<string> chosenColor, string color)
         {
-            this.position = position;
-            this.player = player;
+            this.chosenColor = chosenColor;
+            this.color = color;
 
-            player.ValueChanged += () => CanExecuteChanged(this, new EventArgs());
+            chosenColor.ValueChanged += () => CanExecuteChanged(this, new EventArgs());
         }
 
         public bool CanExecute(object parameter)
@@ -83,7 +80,7 @@ namespace ViewModel
 
         public void Execute(object parameter)
         {
-            player.Value.Color = (string)parameter;
+            chosenColor.Value = color;
         }
     }
 }
