@@ -17,17 +17,30 @@ namespace ViewModel
 
         public ColorSelectionViewModel(string initialColor)
         {
-            InitializeColors();
+            InitializeColors(new List<string> { "Yellow", "Orange", "Red", "DarkRed", "GreenYellow", "Turquoise", "CornflowerBlue", "DarkOrchid", "Peru", "White", "Gray", "Black" });
             ChosenColor = Cell.Create(initialColor);
             Rows = Enumerable.Range(0, Colors.Count).Select(i => new ColorSelectionRowViewModel(ChosenColor, i, Colors[i])).ToList().AsReadOnly();
         }
 
-        private void InitializeColors()
+        private void InitializeColors(List<string> listOfColors)
         {
-            Row1 = new List<string> { "Yellow", "Orange", "Red", "DarkRed" };
-            Row2 = new List<string> { "GreenYellow", "Turquoise", "CornflowerBlue", "DarkOrchid" };
-            Row3 = new List<string> { "Peru", "White", "Gray", "Black" };
-            Colors = new List<List<string>>() { Row1, Row2, Row3 };
+            int width = 1;
+            while (width * width < listOfColors.Count) width += 1;
+            int height = listOfColors.Count / width;
+            if (listOfColors.Count % width != 0) height += 1;
+            Colors = new List<List<string>>();
+            for (int i = 0; i < height; i++)
+            {
+                List<string> row = new List<string>();
+                for (int j = 0; j < width; j++)
+                {
+                    if (i * width + j < listOfColors.Count)
+                    {
+                        row.Add(listOfColors[i * width + j]);
+                    }
+                }
+                Colors.Add(row);
+            }
         }
     }
 
