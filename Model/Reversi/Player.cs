@@ -23,6 +23,8 @@ namespace Model.Reversi
         public static readonly Player WHITE = new White();
 
         public abstract Player OtherPlayer { get; }
+        public string Name { get; set; }
+        public string Color { get; set; }
 
         private class Black : Player
         {

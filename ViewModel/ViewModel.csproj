@@ -43,7 +43,8 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StartViewModel.cs" />
-    <Compile Include="ViewModel.cs" />
+    <Compile Include="ColorSelectionViewModel.cs" />
+    <Compile Include="BoardViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Cells\Cells.csproj">

@@ -12,18 +12,20 @@ namespace ViewModel
     {
         public Cell<ReversiGame> ReversiGame { get; }
         public IList<BoardRowViewModel> Rows { get; }
-        public Cell<int> ScoreCurrentPlayer { get; }
-        public Cell<int> ScoreOtherPlayer { get; }
+        public Cell<double> Player1ScoreBar { get; }
+        public Cell<double> Player2ScoreBar { get; }
         public Cell<bool> IsGameOver { get; }
         public Cell<Player> Winner { get; }
         public Cell<string> GameOverMessage { get; }
 
-        public BoardViewModel(int dimension)
+        public BoardViewModel(int dimension, string namePlayer1, string namePlayer2)
         {
             this.ReversiGame = Cell.Create(new ReversiGame(dimension, dimension));
+            this.ReversiGame.Value.CurrentPlayer.Name = namePlayer1;
+            this.ReversiGame.Value.CurrentPlayer.OtherPlayer.Name = namePlayer2;
 
-            this.ScoreCurrentPlayer = Cell.Derive(ReversiGame, g => g.Board.CountStones(g.CurrentPlayer));
-            this.ScoreOtherPlayer = Cell.Derive(ReversiGame, g => g.Board.CountStones(g.CurrentPlayer.OtherPlayer));
+            this.Player1ScoreBar = Cell.Derive(ReversiGame, g => ScoreBarSize(g.Board.CountStones(g.FirstPlayer), dimension));
+            this.Player2ScoreBar = Cell.Derive(ReversiGame, g => ScoreBarSize(g.Board.CountStones(g.FirstPlayer.OtherPlayer), dimension));
 
             this.IsGameOver = Cell.Derive(ReversiGame, g => g.IsGameOver);
             this.Winner = Cell.Derive(ReversiGame, g => GetWinner(g));
@@ -34,11 +36,13 @@ namespace ViewModel
 
         private Player GetWinner(ReversiGame game)
         {
-            if (ScoreCurrentPlayer.Value > ScoreOtherPlayer.Value)
+            int scoreCurrentPlayer = game.Board.CountStones(ReversiGame.Value.CurrentPlayer);
+            int scoreOtherPlayer = game.Board.CountStones(ReversiGame.Value.CurrentPlayer.OtherPlayer);
+            if (scoreCurrentPlayer > scoreOtherPlayer)
             {
                 return game.CurrentPlayer;
             }
-            else if (ScoreCurrentPlayer.Value < ScoreOtherPlayer.Value)
+            else if (scoreCurrentPlayer < scoreOtherPlayer)
             {
                 return game.CurrentPlayer.OtherPlayer;
             }
@@ -50,14 +54,20 @@ namespace ViewModel
             string message = "";
             if (GetWinner(game) == null)
             {
-                message += "Tie score of " + ScoreCurrentPlayer.Value + " - " + ScoreOtherPlayer.Value;
+                int tieScore = game.Board.CountStones(ReversiGame.Value.CurrentPlayer);
+                message += "Nobody wins: tie score of " + tieScore + " - " + tieScore + ".";
 
             }
             else
             {
-                message += "won with " + game.Board.CountStones(GetWinner(game)) + " - " + game.Board.CountStones(GetWinner(game).OtherPlayer);
+                message += Winner.Value.Name + " won with " + game.Board.CountStones(GetWinner(game)) + " - " + game.Board.CountStones(GetWinner(game).OtherPlayer) + ".";
             }
             return message;
+        }
+
+        private double ScoreBarSize(int points, int dimension)
+        {
+            return (double)points * ((dimension - 2) * 32) / (dimension * dimension);
         }
     }
 

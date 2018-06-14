@@ -35,6 +35,7 @@ namespace Model.Reversi
         /// Player whose turn it is.
         /// </summary>
         public Player CurrentPlayer { get; }
+        public Player FirstPlayer { get { return Player.BLACK; } }
 
         /// <summary>
         /// True is the game is over, false otherwise.
