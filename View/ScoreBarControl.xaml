@@ -30,11 +30,13 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <TextBlock Grid.Column="0" Text="{Binding Path=Header, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}" Foreground="{Binding Path=Color, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Converter={StaticResource stringToColorConverter}}"/>
-        <Rectangle Grid.Column="1" Width="{Binding Path=Value, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}" Fill="{Binding Path=Color, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Converter={StaticResource stringToColorConverter}}"/>
+        <TextBlock Grid.Column="0" Text="{Binding Path=Player, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}" Foreground="{Binding Path=Color, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Converter={StaticResource stringToColorConverter}}" FontWeight="Bold"/>
+        <Rectangle Grid.Column="1" Width="{Binding Path=ScoreBar, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}" Fill="{Binding Path=Color, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Converter={StaticResource stringToColorConverter}}"/>
+        <TextBlock Grid.Column="2" Text="{Binding Path=Score, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}" Foreground="{Binding Path=Color, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Converter={StaticResource stringToColorConverter}}"/>
     </Grid>
 </UserControl>

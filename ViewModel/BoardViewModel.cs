@@ -65,7 +65,7 @@ namespace ViewModel
             if (GetWinner(game) == null)
             {
                 int tieScore = game.Board.CountStones(ReversiGame.Value.CurrentPlayer);
-                message += "Nobody wins: tie score of " + tieScore + " - " + tieScore + ".";
+                message += "Tie score of " + tieScore + " - " + tieScore + ".";
 
             }
             else
