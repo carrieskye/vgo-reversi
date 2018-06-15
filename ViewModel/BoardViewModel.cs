@@ -12,28 +12,28 @@ namespace ViewModel
     {
         public Cell<ReversiGame> ReversiGame { get; }
         public IList<BoardRowViewModel> Rows { get; }
-        public Cell<double> Player1ScoreBar { get; }
-        public Cell<double> Player2ScoreBar { get; }
         public Cell<bool> IsGameOver { get; }
         public Cell<Player> Winner { get; }
         public Cell<string> GameOverMessage { get; }
+        public PlayerViewModel Player1 { get; }
+        public PlayerViewModel Player2 { get; }
 
         public BoardViewModel(int dimension, string namePlayer1, string namePlayer2, string colorPlayer1, string colorPlayer2)
         {
-            this.ReversiGame = Cell.Create(new ReversiGame(dimension, dimension));
-            this.ReversiGame.Value.CurrentPlayer.Name = namePlayer1;
-            this.ReversiGame.Value.CurrentPlayer.OtherPlayer.Name = namePlayer2;
-            this.ReversiGame.Value.CurrentPlayer.Color = colorPlayer1;
-            this.ReversiGame.Value.CurrentPlayer.OtherPlayer.Color = colorPlayer2;
+            ReversiGame = Cell.Create(new ReversiGame(dimension, dimension));
+            ReversiGame.Value.CurrentPlayer.Name = namePlayer1;
+            ReversiGame.Value.CurrentPlayer.OtherPlayer.Name = namePlayer2;
+            ReversiGame.Value.CurrentPlayer.Color = colorPlayer1;
+            ReversiGame.Value.CurrentPlayer.OtherPlayer.Color = colorPlayer2;
 
-            this.Player1ScoreBar = Cell.Derive(ReversiGame, g => ScoreBarSize(g.Board.CountStones(g.FirstPlayer), dimension));
-            this.Player2ScoreBar = Cell.Derive(ReversiGame, g => ScoreBarSize(g.Board.CountStones(g.FirstPlayer.OtherPlayer), dimension));
+            Player1 = new PlayerViewModel(this, ReversiGame.Value.CurrentPlayer, dimension);
+            Player2 = new PlayerViewModel(this, ReversiGame.Value.CurrentPlayer.OtherPlayer, dimension);
 
-            this.IsGameOver = Cell.Derive(ReversiGame, g => g.IsGameOver);
-            this.Winner = Cell.Derive(ReversiGame, g => GetWinner(g));
-            this.GameOverMessage = Cell.Derive(ReversiGame, g => CreateGameOverMessage(g));
+            IsGameOver = Cell.Derive(ReversiGame, g => g.IsGameOver);
+            Winner = Cell.Derive(ReversiGame, g => GetWinner(g));
+            GameOverMessage = Cell.Derive(ReversiGame, g => CreateGameOverMessage(g));
 
-            Rows = Enumerable.Range(0, ReversiGame.Value.Board.Height).Select(i => new BoardRowViewModel(this.ReversiGame, i)).ToList().AsReadOnly();
+            Rows = Enumerable.Range(0, ReversiGame.Value.Board.Height).Select(i => new BoardRowViewModel(ReversiGame, i)).ToList().AsReadOnly();
         }
 
         private Player GetWinner(ReversiGame game)
@@ -67,9 +67,13 @@ namespace ViewModel
             return message;
         }
 
-        private double ScoreBarSize(int points, int dimension)
+        public IEnumerable<PlayerViewModel> Players
         {
-            return (double)points * ((dimension - 2) * 32) / (dimension * dimension);
+            get
+            {
+                yield return Player1;
+                yield return Player2;
+            }
         }
     }
 
@@ -94,7 +98,7 @@ namespace ViewModel
 
         public BoardSquareViewModel(Cell<ReversiGame> game, int rowNumber, int columnNumber)
         {
-            this.position = new Vector2D(rowNumber, columnNumber);
+            position = new Vector2D(rowNumber, columnNumber);
             Owner = Cell.Derive(game, g => SetOwnerOrCandidate(g));
             Type = Cell.Derive(game, g => SetType(g));
             PutStoneCommand = new PutStoneCommand(game, position);
@@ -141,6 +145,29 @@ namespace ViewModel
         public void Execute(object parameter)
         {
             game.Value = game.Value.PutStone(position);
+        }
+    }
+
+    public class PlayerViewModel
+    {
+        private readonly BoardViewModel parent;
+        private readonly Player player;
+        public Cell<int> Score { get; }
+        public Cell<double> ScoreBar { get; }
+        public String Name => player.Name;
+        public String Color => player.Color;
+
+        public PlayerViewModel(BoardViewModel parent, Player player, int dimension)
+        {
+            this.parent = parent;
+            this.player = player;
+            Score = Cell.Derive(this.parent.ReversiGame, g => g.Board.CountStones(player));
+            ScoreBar = Cell.Derive(Score, s => ScoreBarSize(s, dimension));
+        }
+
+        private double ScoreBarSize(int points, int dimension)
+        {
+            return (double)points * ((dimension - 2) * 32) / (dimension * dimension);
         }
     }
 }
