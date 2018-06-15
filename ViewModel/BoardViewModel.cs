@@ -15,25 +15,33 @@ namespace ViewModel
         public Cell<bool> IsGameOver { get; }
         public Cell<Player> Winner { get; }
         public Cell<string> GameOverMessage { get; }
-        public PlayerViewModel Player1 { get; }
-        public PlayerViewModel Player2 { get; }
+        public PlayerViewModel Player1 { get; private set; }
+        public PlayerViewModel Player2 { get; private set; }
 
-        public BoardViewModel(int dimension, string namePlayer1, string namePlayer2, string colorPlayer1, string colorPlayer2)
+        public BoardViewModel(int dimension, PlayerInfoViewModel player1, PlayerInfoViewModel player2)
         {
             ReversiGame = Cell.Create(new ReversiGame(dimension, dimension));
-            ReversiGame.Value.CurrentPlayer.Name = namePlayer1;
-            ReversiGame.Value.CurrentPlayer.OtherPlayer.Name = namePlayer2;
-            ReversiGame.Value.CurrentPlayer.Color = colorPlayer1;
-            ReversiGame.Value.CurrentPlayer.OtherPlayer.Color = colorPlayer2;
-
-            Player1 = new PlayerViewModel(this, ReversiGame.Value.CurrentPlayer, dimension);
-            Player2 = new PlayerViewModel(this, ReversiGame.Value.CurrentPlayer.OtherPlayer, dimension);
+            InitializePlayers(dimension, player1, player2);
 
             IsGameOver = Cell.Derive(ReversiGame, g => g.IsGameOver);
             Winner = Cell.Derive(ReversiGame, g => GetWinner(g));
             GameOverMessage = Cell.Derive(ReversiGame, g => CreateGameOverMessage(g));
 
             Rows = Enumerable.Range(0, ReversiGame.Value.Board.Height).Select(i => new BoardRowViewModel(ReversiGame, i)).ToList().AsReadOnly();
+        }
+
+        private void InitializePlayers(int dimension, PlayerInfoViewModel player1, PlayerInfoViewModel player2)
+        {
+            if (!string.IsNullOrEmpty(player1.Name.Value.Trim())) ReversiGame.Value.CurrentPlayer.Name = player1.Name.Value;
+            else ReversiGame.Value.CurrentPlayer.Name = "Player 1";
+            if (!string.IsNullOrEmpty(player2.Name.Value.Trim())) ReversiGame.Value.CurrentPlayer.OtherPlayer.Name = player2.Name.Value;
+            else ReversiGame.Value.CurrentPlayer.OtherPlayer.Name = "Player 2";
+
+            ReversiGame.Value.CurrentPlayer.Color = player1.Color.Value;
+            ReversiGame.Value.CurrentPlayer.OtherPlayer.Color = player2.Color.Value;
+
+            Player1 = new PlayerViewModel(this, ReversiGame.Value.CurrentPlayer, dimension);
+            Player2 = new PlayerViewModel(this, ReversiGame.Value.CurrentPlayer.OtherPlayer, dimension);
         }
 
         private Player GetWinner(ReversiGame game)
@@ -125,14 +133,14 @@ namespace ViewModel
 
     public class PutStoneCommand : ICommand
     {
-        private readonly Vector2D position;
         public event EventHandler CanExecuteChanged;
         private readonly Cell<ReversiGame> game;
+        private readonly Vector2D position;
 
         public PutStoneCommand(Cell<ReversiGame> game, Vector2D position)
         {
-            this.position = position;
             this.game = game;
+            this.position = position;
 
             game.ValueChanged += () => CanExecuteChanged(this, new EventArgs());
         }
@@ -152,10 +160,10 @@ namespace ViewModel
     {
         private readonly BoardViewModel parent;
         private readonly Player player;
-        public Cell<int> Score { get; }
-        public Cell<double> ScoreBar { get; }
         public String Name => player.Name;
         public String Color => player.Color;
+        public Cell<int> Score { get; }
+        public Cell<double> ScoreBar { get; }
 
         public PlayerViewModel(BoardViewModel parent, Player player, int dimension)
         {

@@ -1,32 +1,47 @@
 ﻿using Cells;
 using System;
+using System.Collections.Generic;
 
 namespace ViewModel
 {
     public class StartViewModel
     {
-        public string Text { get; }
         public Cell<int> Dimension { get; }
-        public Cell<string> NamePlayer1 { get; }
-        public Cell<string> NamePlayer2 { get; }
-        public Cell<string> ColorPlayer1 { get; }
-        public Cell<string> ColorPlayer2 { get; }
         public Cell<String> DimensionString { get; }
-        public ColorSelectionViewModel ColorSelectionPlayer1 { get; }
-        public ColorSelectionViewModel ColorSelectionPlayer2 { get; }
+        public PlayerInfoViewModel Player1 { get; }
+        public PlayerInfoViewModel Player2 { get; }
 
         public StartViewModel()
         {
-            this.NamePlayer1 = Cell.Create("");
-            this.NamePlayer2 = Cell.Create("");
+            Player1 = new PlayerInfoViewModel("Player 1", "Black");
+            Player2 = new PlayerInfoViewModel("Player 2", "White");
+            Dimension = Cell.Create(8);
+            DimensionString = Cell.Derive(Dimension, dim => dim.ToString() + " x " + dim.ToString());
+        }
 
-            this.ColorSelectionPlayer1 = new ColorSelectionViewModel("Black");
-            this.ColorSelectionPlayer2 = new ColorSelectionViewModel("White");
-            this.ColorPlayer1 = ColorSelectionPlayer1.ChosenColor;
-            this.ColorPlayer2 = ColorSelectionPlayer2.ChosenColor;
+        public IEnumerable<PlayerInfoViewModel> Players
+        {
+            get
+            {
+                yield return Player1;
+                yield return Player2;
+            }
+        }
+    }
 
-            this.Dimension = Cell.Create(8);
-            this.DimensionString = Cell.Derive(Dimension, dim => dim.ToString() + " x " + dim.ToString());
+    public class PlayerInfoViewModel
+    {
+        public string DefaultName { get; }
+        public Cell<string> Name { get; }
+        public Cell<string> Color { get; }
+        public ColorSelectionViewModel AllColors { get; }
+
+        public PlayerInfoViewModel(string defaultName, string initialColor)
+        {
+            DefaultName = defaultName;
+            Name = Cell.Create("");
+            AllColors = new ColorSelectionViewModel(initialColor);
+            Color = AllColors.ChosenColor;
         }
     }
 }

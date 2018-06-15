@@ -15,7 +15,7 @@ namespace View
             InitializeComponent();
 
             startViewModel = new StartViewModel();
-            this.DataContext = startViewModel;
+            DataContext = startViewModel;
         }
 
         private void ShowColorsPlayer1(object sender, RoutedEventArgs e)
@@ -40,9 +40,9 @@ namespace View
 
         private void StartGame(object sender, RoutedEventArgs e)
         {
-            MainWindow gameWindow = new MainWindow(startViewModel.Dimension.Value, startViewModel.NamePlayer1.Value, startViewModel.NamePlayer2.Value, startViewModel.ColorPlayer1.Value, startViewModel.ColorPlayer2.Value);
+            MainWindow gameWindow = new MainWindow(startViewModel.Dimension.Value, startViewModel.Player1, startViewModel.Player2);
             gameWindow.Show();
-            this.Close();
+            Close();
         }
     }
 }

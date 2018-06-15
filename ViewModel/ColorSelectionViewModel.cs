@@ -64,7 +64,7 @@ namespace ViewModel
 
         public ColorSelectionSquareViewModel(Cell<string> chosenColor, int rowNumber, int columnNumber, string color)
         {
-            this.position = new Vector2D(rowNumber, columnNumber);
+            position = new Vector2D(rowNumber, columnNumber);
             Color = Cell.Create(color);
             SelectColorCommand = new SelectColorCommand(chosenColor, color);
         }

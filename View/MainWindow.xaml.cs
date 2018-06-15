@@ -10,15 +10,15 @@ namespace View
     {
         private BoardViewModel board;
 
-        public MainWindow(int dimension, string namePlayer1, string namePlayer2, string colorPlayer1, string colorPlayer2)
+        public MainWindow(int dimension, PlayerInfoViewModel player1, PlayerInfoViewModel player2)
         {
             InitializeComponent();
-            this.Height = dimension * 32 + 160;
-            this.Width = dimension * 32 + 100;
-            if (this.Width < 228) { this.Width = 228; }
+            Height = dimension * 32 + 160;
+            Width = dimension * 32 + 100;
+            if (Width < 228) { Width = 228; }
 
-            board = new BoardViewModel(dimension, namePlayer1, namePlayer2, colorPlayer1, colorPlayer2);
-            this.DataContext = board;
+            board = new BoardViewModel(dimension, player1, player2);
+            DataContext = board;
         }
     }
 }

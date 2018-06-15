@@ -1,9 +1,5 @@
 ﻿using DataStructures;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Model.Reversi
 {
@@ -35,7 +31,6 @@ namespace Model.Reversi
         /// Player whose turn it is.
         /// </summary>
         public Player CurrentPlayer { get; }
-        public Player FirstPlayer { get { return Player.BLACK; } }
 
         /// <summary>
         /// True is the game is over, false otherwise.
@@ -61,7 +56,7 @@ namespace Model.Reversi
         /// <returns>A new game object representing the new state of the game.</returns>
         public ReversiGame PutStone(Vector2D position)
         {
-            if ( position == null )
+            if (position == null)
             {
                 throw new ArgumentNullException(nameof(position));
             }
@@ -69,7 +64,7 @@ namespace Model.Reversi
             {
                 throw new InvalidOperationException("Game is over");
             }
-            else if ( !Board.IsValidMove(position, CurrentPlayer))
+            else if (!Board.IsValidMove(position, CurrentPlayer))
             {
                 throw new InvalidOperationException("Invalid move for current player");
             }
@@ -77,11 +72,11 @@ namespace Model.Reversi
             {
                 var updatedBoard = Board.AddStone(position, CurrentPlayer);
 
-                if ( updatedBoard.HasValidMoves(CurrentPlayer.OtherPlayer) )
+                if (updatedBoard.HasValidMoves(CurrentPlayer.OtherPlayer))
                 {
                     return new ReversiGame(updatedBoard, CurrentPlayer.OtherPlayer);
                 }
-                else if ( updatedBoard.HasValidMoves(CurrentPlayer))
+                else if (updatedBoard.HasValidMoves(CurrentPlayer))
                 {
                     return new ReversiGame(updatedBoard, CurrentPlayer);
                 }

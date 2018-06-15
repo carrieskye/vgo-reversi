@@ -84,12 +84,13 @@ namespace View
     {
         public object Convert(object[] values, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            string name1 = (string)values[0];
-            string name2 = (string)values[1];
+            string name1 = ((string)values[0]).Trim();
+            string name2 = ((string)values[1]).Trim();
             string color1 = (string)values[2];
             string color2 = (string)values[3];
-            if (string.IsNullOrEmpty(name1.Trim()) || string.IsNullOrEmpty(name2.Trim())) return false;
-            if (name1.Equals(name2) || color1.Equals(color2)) return false;
+            if (string.IsNullOrEmpty(name1) && name2.Equals("Player 1")) return false;
+            if (string.IsNullOrEmpty(name2) && name1.Equals("Player 2")) return false;
+            if ((name1.Equals(name2) && !string.IsNullOrEmpty(name1)) || color1.Equals(color2)) return false;
             return true;
         }
 

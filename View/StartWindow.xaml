@@ -25,7 +25,7 @@
                 <Setter.Value>
                     <ControlTemplate>
                         <Grid>
-                            <Ellipse Fill="{Binding Path=ColorPlayer1.Value, Converter={StaticResource stringToColorConverter}}" Width="20" Height="20"/>
+                            <Ellipse Fill="{Binding Path=Player1.Color.Value, Converter={StaticResource stringToColorConverter}}" Width="20" Height="20"/>
                             <ContentControl HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Grid>
                     </ControlTemplate>
@@ -38,7 +38,7 @@
                 <Setter.Value>
                     <ControlTemplate>
                         <Grid>
-                            <Ellipse Fill="{Binding Path=ColorPlayer2.Value, Converter={StaticResource stringToColorConverter}}" Width="20" Height="20"/>
+                            <Ellipse Fill="{Binding Path=Player2.Color.Value, Converter={StaticResource stringToColorConverter}}" Width="20" Height="20"/>
                             <ContentControl HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Grid>
                     </ControlTemplate>
@@ -76,10 +76,10 @@
             <Setter Property="IsEnabled">
                 <Setter.Value>
                     <MultiBinding Converter="{StaticResource nameAndColorValidationConverter}">
-                        <Binding Path="NamePlayer1.Value"/>
-                        <Binding Path="NamePlayer2.Value"/>
-                        <Binding Path="ColorPlayer1.Value"/>
-                        <Binding Path="ColorPlayer2.Value"/>
+                        <Binding Path="Player1.Name.Value"/>
+                        <Binding Path="Player2.Name.Value"/>
+                        <Binding Path="Player1.Color.Value"/>
+                        <Binding Path="Player2.Color.Value"/>
                     </MultiBinding>
                 </Setter.Value>
             </Setter>
@@ -105,12 +105,12 @@
             <TextBlock Grid.Row="0" Grid.Column="1" Text="Name"/>
             <TextBlock Grid.Row="0" Grid.Column="2" Text="Color"/>
 
-            <TextBlock Grid.Row="1" Grid.Column="0" Text="Player 1:"/>
-            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding NamePlayer1.Value}"/>
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding Player1.DefaultName}"/>
+            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Player1.Name.Value}"/>
             <Button Grid.Row="1" Grid.Column="2" Click="ShowColorsPlayer1" Style="{StaticResource colorsPlayer1}"/>
             <Popup Name="ColorSelectionPlayer1" Placement="Mouse">
                 <Grid>
-                    <ItemsControl ItemsSource="{Binding ColorSelectionPlayer1.Rows}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="1,1,1,1">
+                    <ItemsControl ItemsSource="{Binding Player1.AllColors.Rows}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="1,1,1,1">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <StackPanel Orientation="Vertical"/>
@@ -138,12 +138,12 @@
                 </Grid>
             </Popup>
 
-            <TextBlock Grid.Row="2" Grid.Column="0" Text="Player 2:"/>
-            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding NamePlayer2.Value}"/>
+            <TextBlock Grid.Row="2" Grid.Column="0" Text="{Binding Player2.DefaultName}"/>
+            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Player2.Name.Value}"/>
             <Button Grid.Row="2" Grid.Column="2" Click="ShowColorsPlayer2" Style="{StaticResource colorsPlayer2}"/>
             <Popup Name="ColorSelectionPlayer2" Placement="Mouse">
                 <Grid>
-                    <ItemsControl ItemsSource="{Binding ColorSelectionPlayer2.Rows}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="1,1,1,1">
+                    <ItemsControl ItemsSource="{Binding Player2.AllColors.Rows}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="1,1,1,1">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <StackPanel Orientation="Vertical"/>
@@ -176,6 +176,7 @@
 
             <Slider Grid.Row="4" Grid.Column="1" Minimum="2" Maximum="18" TickFrequency="2" IsSnapToTickEnabled="True" Value="{Binding Path=Dimension.Value}"/>
         </Grid>
+
 
         <Button Content="Start" Style="{StaticResource startButton}" Click="StartGame"/>
     </StackPanel>
